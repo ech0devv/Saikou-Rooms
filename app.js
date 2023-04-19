@@ -20,7 +20,6 @@ io.on("connection", (socket) => {
         rooms[args[0]] = socket.id;
         socket.join(args[0]);
         console.log(`New room titled ${args[0]} was created!`)
-        console.log(rooms[args[0]]);
     }else{
         socket.emit("error", "Room name either: Already exists, is empty, or is not a string.")
     }
@@ -35,6 +34,7 @@ io.on("connection", (socket) => {
         });
         socket.join(args[0]);
         io.to(args[0]).emit("updateRequest");
+        console.log("Socket joined room " + args[0])
     }else{
         socket.emit("error", "Room doesn't exist!")
     }
