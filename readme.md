@@ -18,7 +18,8 @@ Unix: `node ./app.js`
 
 Windows (pwsh): `node .\app.js`
 
-Websocket is available @ `ws://localhost:2378`.
+
+Websocket is now available @ `ws://localhost:2378`.
 
 It is recommended to use `socket.io` to interact with the server.
 
