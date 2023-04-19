@@ -1,3 +1,19 @@
+## Installation / Setup
+
+Clone this repository using
+`git clone https://github.com/ech0devv/Saikou-Rooms`
+Move into the directory using
+`cd Saikou-Rooms`
+Set up all packages
+`npm i`
+Run
+Unix: `node ./app.js`
+Windows (pwsh): `node .\app.js`
+
+Websocket is available @ ws://localhost:2378
+It is recommended to use `socket.io` to interact with the server.
+
+------------
 ## Socket Events
 
 ### Client to Server - create
