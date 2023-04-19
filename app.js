@@ -20,6 +20,7 @@ io.on("connection", (socket) => {
         rooms[args[0]] = socket.id;
         socket.join(args[0]);
         console.log(`New room titled ${args[0]} was created!`)
+        console.log(rooms[args[0]]);
     }else{
         socket.emit("error", "Room name either: Already exists, is empty, or is not a string.")
     }
@@ -56,11 +57,12 @@ io.on("connection", (socket) => {
     }
   });
   socket.on("disconnect", () => {
-    if(rooms.hasOwnProperty(socket.id)){
+    if(Object.values(rooms).includes(socket.id)){
         let key = getKeyByValue(rooms, socket.id);
-        io.to(key).emit("disconnect");
+        io.to(key).emit("disconnected");
         delete rooms[key];
         io.socketsLeave(key);
+        console.log("Socket disconnected! " + socket.id)
     }
   });
 });
