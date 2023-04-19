@@ -14,7 +14,14 @@ io.on("connection", (socket) => {
         const socketRooms = Object.keys(socket.rooms);
         socketRooms.forEach((room) => {
             if(room !== socket.id){
-                socket.leave(room);
+                if(rooms[room] == socket.id){
+                    io.to(room).emit("disconnected");
+                    delete rooms[room];
+                    io.socketsLeave(room);
+                    console.log("Socket disconnected! " + socket.id)
+                }else{
+                    socket.leave(room);
+                }
             }
         });
         rooms[args[0]] = socket.id;
@@ -28,7 +35,12 @@ io.on("connection", (socket) => {
     if(rooms.hasOwnProperty(args[0])){
         const socketRooms = Object.keys(socket.rooms);
         socketRooms.forEach((room) => {
-            if(room !== socket.id){
+            if(rooms[room] == socket.id){
+                io.to(room).emit("disconnected");
+                delete rooms[room];
+                io.socketsLeave(room);
+                console.log("Socket disconnected! " + socket.id)
+            }else{
                 socket.leave(room);
             }
         });

@@ -93,3 +93,9 @@ argument1 = Source
 argument2 = Title
 
 argument3 = Watch Time (millis)
+
+#### Disconnected
+    .on("disconnected")
+
+Occurs when the host leaves, therefore banishing the room to the shadow realm, alongside everything inside of it. This notifies the client.
+
