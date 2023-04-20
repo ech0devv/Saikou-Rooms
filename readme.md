@@ -110,7 +110,7 @@ argument3 = Watch Time (millis)
 
 JSON Array with all users (username, profile picture link) in a room.
 
-argument0 = JSON Array with JSON Object data type, in the following format: (username, profile picture link)
+argument0 = JSON Array with JSON Array data type, in the following format: (username, profile picture link)
 
 Server will emit error if:
 - Client is not in room.
