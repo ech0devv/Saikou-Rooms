@@ -26,49 +26,57 @@ async function onUserRequest(socket, args){
 
 io.on("connection", (socket) => {
   socket.on("create", (...args) => {
-    if(!rooms.hasOwnProperty(args[0]) && args[0] !== ""){
-        const socketRooms = Object.keys(socket.rooms);
-        socketRooms.forEach((room) => {
-            if(room !== socket.id){
+    if(args.length == 3){
+        if(!rooms.hasOwnProperty(args[0]) && args[0] !== ""){
+            const socketRooms = Object.keys(socket.rooms);
+            socketRooms.forEach((room) => {
+                if(room !== socket.id){
+                    if(rooms[room] == socket.id){
+                        io.to(room).emit("disconnected");
+                        delete rooms[room];
+                        io.socketsLeave(room);
+                        console.log("Socket disconnected! " + socket.id);
+                    }else{
+                        socket.leave(room);
+                    }
+                }
+            });
+            rooms[args[0]] = socket.id;
+            socket.join(args[0]);
+            console.log(`New room titled ${args[0]} was created!`);
+            users[socket.id] = [args[1], args[2]];
+            onUserRequest(socket, args);
+        }else{
+            socket.emit("error", "Room name either: Already exists, is empty, or is not a string.");
+        }
+    }else{
+        socket.emit("error", "Invalid arguments!");
+    }
+  });
+  socket.on("join", (...args) => {
+    if(args.length == 3){
+        if(rooms.hasOwnProperty(args[0])){
+            const socketRooms = Object.keys(socket.rooms);
+            socketRooms.forEach((room) => {
                 if(rooms[room] == socket.id){
                     io.to(room).emit("disconnected");
                     delete rooms[room];
                     io.socketsLeave(room);
-                    console.log("Socket disconnected! " + socket.id);
+                    console.log("Socket disconnected! " + socket.id)
                 }else{
                     socket.leave(room);
                 }
-            }
-        });
-        rooms[args[0]] = socket.id;
-        socket.join(args[0]);
-        console.log(`New room titled ${args[0]} was created!`);
-        users[socket.id] = [args[1], args[2]];
-        onUserRequest(socket, args);
+            });
+            socket.join(args[0]);
+            io.to(args[0]).emit("updateRequest");
+            console.log("Socket joined room " + args[0])
+            users[socket.id] = [args[1], args[2]];
+            onUserRequest(socket, args);
+        }else{
+            socket.emit("error", "Room doesn't exist!")
+        }
     }else{
-        socket.emit("error", "Room name either: Already exists, is empty, or is not a string.");
-    }
-  });
-  socket.on("join", (...args) => {
-    if(rooms.hasOwnProperty(args[0])){
-        const socketRooms = Object.keys(socket.rooms);
-        socketRooms.forEach((room) => {
-            if(rooms[room] == socket.id){
-                io.to(room).emit("disconnected");
-                delete rooms[room];
-                io.socketsLeave(room);
-                console.log("Socket disconnected! " + socket.id)
-            }else{
-                socket.leave(room);
-            }
-        });
-        socket.join(args[0]);
-        io.to(args[0]).emit("updateRequest");
-        console.log("Socket joined room " + args[0])
-        users[socket.id] = [args[1], args[2]];
-        onUserRequest(socket, args);
-    }else{
-        socket.emit("error", "Room doesn't exist!")
+        socket.emit("error", "Invalid arguments!");
     }
   });
   socket.on("hostUpdate", (...args) => {
