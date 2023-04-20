@@ -30,10 +30,12 @@ It is recommended to use `socket.io` to interact with the server.
 ### Client to Server
 
 #### Create a room
-    .emit("create", argument0)
+    .emit("create", argument0, argument1, argument2)
 This creates a room and adds the client, removing the client from any other rooms.
 
 argument0 = Room name.
+argument1 = Username.
+argument2 = Profile Picture Link.
 
 Server will emit error if:
 - Room already exists.
@@ -44,6 +46,8 @@ Server will emit error if:
 Adds the client to a room, removing the client from any other rooms.
 
 argument0 = Room name.
+argument1 = Username.
+argument2 = Profile Picture Link.
 
 Server will emit error if:
 - Room doesn't exist.
@@ -64,6 +68,13 @@ argument3 = Watch Time (millis)
 Server will emit error if:
 - Client is not host of room.
 - Invalid arguments.
+
+#### Request update of users object - 
+    .emit("requestUsers", ())
+Asks that the server sends a new JSON array with all user data in it, `users`.
+
+Server will emit error if:
+- Client is not in room.
 
 ### Server to Client
 
@@ -94,8 +105,18 @@ argument2 = Title
 
 argument3 = Watch Time (millis)
 
+#### Users object - 
+    .on("users", (argument0))
+
+JSON Array with all users (username, profile picture link) in a room.
+
+argument0 = JSON Array with JSON Object data type, in the following format: (username, profile picture link)
+
+Server will emit error if:
+- Client is not in room.
+
 #### Disconnected
     .on("disconnected")
 
-Occurs when the host leaves, therefore banishing the room to the shadow realm, alongside everything inside of it. This notifies the client.
+Occurs when the host leaves, therefore banishing the room to the shadow realm, alongside everything inside of it. This notifies the client prior to removing it from the room.
 
