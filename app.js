@@ -82,7 +82,7 @@ io.on("connection", (socket) => {
         }
     });
     socket.on("hostUpdate", (...args) => {
-        if (typeof args[0] === "number" && typeof args[1] === "string" && typeof args[2] === "string" && typeof args[3] === "number") {
+        if (typeof args[0] === "number" && typeof args[1] === "string" && typeof args[2] === "string" && typeof args[3] === "number" && typeof args[4] === "string") {
             let found = false;
             for (let k in rooms) {
                 if (rooms[k] == socket.id) {
