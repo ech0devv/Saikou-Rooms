@@ -54,16 +54,18 @@ Server will emit error if:
 - Invalid arguments
 
 #### Send update to all members of room - 
-    .emit("hostUpdate", argument0, argument1, argument2, argument3)
+    .emit("hostUpdate", argument0, argument1, argument2, argument3, argument4)
 Sends new data to room members (watchtime, source, title, anilist id).
 
 argument0 = AniList ID
 
-argument1 = Source
+argument1 = Source Index
 
 argument2 = Title
 
 argument3 = Watch Time (millis)
+
+argument4 = Episode index
 
 Server will emit error if:
 - Client is not host of room.
@@ -93,17 +95,19 @@ argument0 = Cause for error.
 Requests a `hostUpdate` packet from the host.
 
 #### Update
-    .on("update", (argument0, argument1, argument2, argument3))
+    .on("update", (argument0, argument1, argument2, argument3, argument4))
 
 Contains video data from host. Should not be emitted by client, if this becomes a problem, please make an issue so we can discuss how to fix it.
 
 argument0 = AniList ID
 
-argument1 = Source
+argument1 = Source Index
 
 argument2 = Title
 
 argument3 = Watch Time (millis)
+
+argument4 = Episode Index
 
 #### Users object - 
     .on("users", (argument0))
