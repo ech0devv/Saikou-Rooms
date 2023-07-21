@@ -2,7 +2,7 @@ const {
     Server
 } = require("socket.io");
 
-const io = new Server(2378);
+const io = new Server(2379);
 
 var rooms = {};
 var users = {};
@@ -55,6 +55,10 @@ io.on("connection", (socket) => {
             socket.emit("error", "Invalid arguments!");
         }
     });
+    socket.on("check", () => {
+        console.log("Test Packet Recieved!");
+        socket.emit("green");
+    })
     socket.on("join", (...args) => {
         if (args.length == 3) {
             if (rooms.hasOwnProperty(args[0])) {
